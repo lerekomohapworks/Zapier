@@ -1,19 +1,109 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Zapier Clone</title>
+    <title>Create Automation</title>
     <style>
       body {
         font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        text-align: left;
+      }
+      input, select {
+        width: 100%;
+        padding: 8px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+      .field-pair {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 100px;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #1f6feb;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #1259c4;
       }
     </style>
   </head>
   <body>
-    <h1>Hello 👋</h1>
-    <p>This is your first automation app in progress!</p>
+    <h1>Create a New Automation</h1>
+
+    <label for="name">Automation Name</label>
+    <input id="name" type="text" placeholder="e.g., New Lead Alert" />
+
+    <label for="trigger">Trigger App</label>
+    <select id="trigger">
+      <option value="">Select Trigger</option>
+      <option value="google_sheets">Google Sheets</option>
+      <option value="webhook">Webhook</option>
+    </select>
+
+    <label for="action">Action App</label>
+    <select id="action">
+      <option value="">Select Action</option>
+      <option value="discord">Discord</option>
+      <option value="slack">Slack</option>
+    </select>
+
+    <h3>Field Mapping</h3>
+    <div id="fieldMappings">
+      <div class="field-pair">
+        <input type="text" placeholder="From (e.g., name)" class="from-field" />
+        <input type="text" placeholder="To (e.g., username)" class="to-field" />
+      </div>
+    </div>
+    <button onclick="addField()">➕ Add Field</button>
+    <br /><br />
+    <button onclick="saveAutomation()">💾 Save Automation</button>
+
+    <script>
+      function addField() {
+        const div = document.createElement('div');
+        div.className = 'field-pair';
+        div.innerHTML = `
+          <input type="text" placeholder="From" class="from-field" />
+          <input type="text" placeholder="To" class="to-field" />
+        `;
+        document.getElementById('fieldMappings').appendChild(div);
+      }
+
+      function saveAutomation() {
+        const name = document.getElementById('name').value;
+        const triggerApp = document.getElementById('trigger').value;
+        const actionApp = document.getElementById('action').value;
+
+        const fromFields = document.querySelectorAll('.from-field');
+        const toFields = document.querySelectorAll('.to-field');
+
+        const fieldMap = [];
+        for (let i = 0; i < fromFields.length; i++) {
+          const from = fromFields[i].value;
+          const to = toFields[i].value;
+          if (from && to) {
+            fieldMap.push({ from, to });
+          }
+        }
+
+        const automation = {
+          name,
+          triggerApp,
+          actionApp,
+          fieldMap
+        };
+
+        console.log("Saved automation:", automation);
+        alert("Saved! (Check console)");
+      }
+    </script>
   </body>
 </html>
